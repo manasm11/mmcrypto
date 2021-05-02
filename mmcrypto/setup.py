@@ -12,4 +12,9 @@ setup(
     packages=find_packages(),
     install_requires=open("requirements.txt").readlines(),
     python_requires=">=3.7",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
 )
