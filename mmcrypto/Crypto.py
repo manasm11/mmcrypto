@@ -6,7 +6,7 @@ from ._Price import Price
 
 
 class Crypto:
-    SYMBOLS = ["btc"]
+    SYMBOLS = set()
 
     def __init__(self, symbol: str, data_directory: str):
         if not isinstance(symbol, str):
@@ -42,6 +42,7 @@ class Crypto:
         data = cls._get_data_from_api()
         prices = cls._parse_data_from_api(data)
         for sym, price in prices.items():
+            cls.SYMBOLS.add(sym)
             filename = os.path.join(data_directory, f"{sym}.csv")
             Path(filename).touch()
             price.save(filename)

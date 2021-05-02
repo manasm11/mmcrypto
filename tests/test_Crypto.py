@@ -11,11 +11,6 @@ requests_cache.install_cache(expire_after=360)
 # @mark.xfail(reason="Will Complete After Testing Price")
 def test_crypto(data_directory_, test):
     assert "data" not in data_directory_, "Check the data_directory_ fixture"
-    # Crypto.all FUNCTION TESTS
-    all_ = Crypto.all(data_directory=data_directory_)
-    (_ for _ in all_)  # Check if all_ is iterable
-    assert len(all_) > 0
-    assert isinstance(all_[0], Crypto)
 
     # Crypto.update TESTS
 
@@ -75,3 +70,13 @@ def test_crypto_add_price(crypto, price):
             p._validate()
     except Exception:
         assert False, "Invalid Price"
+
+
+def test_crypto_all(data_directory_):
+    Crypto.update(data_directory_)
+    all_ = Crypto.all(data_directory_)
+    assert len(all_) > 0
+    assert isinstance(all_[0], Crypto)
+    assert "btc" in [c.symbol for c in all_]
+    assert "win" in [c.symbol for c in all_]
+    assert "doge" in [c.symbol for c in all_]
