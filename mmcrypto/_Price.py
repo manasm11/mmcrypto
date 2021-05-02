@@ -71,6 +71,7 @@ class Price(float):
             writer.writerow(row)
 
     def _validate(self):
+        assert self > 0
         for attr in self.attrs:
             if self[attr] is None:
                 raise AttributeError(f"{attr} not assigned in Price")
