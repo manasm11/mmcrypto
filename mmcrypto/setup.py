@@ -8,7 +8,7 @@ setup(
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/manasm11/mmcrypto",
-    version="0.0.0",
+    version="0.0.1",
     packages=find_packages(),
     install_requires=open("requirements.txt").readlines(),
     python_requires=">=3.7",
