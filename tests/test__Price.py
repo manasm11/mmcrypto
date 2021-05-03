@@ -130,7 +130,10 @@ def test_Price_save_method(price, test, filename_):
 
 
 def test_Price_from_list():
-    list_ = "12321,32.45,43.43,53.4,65.7,86.7,6534,534".split(",")
+    # Time, Price, low, high, open_, vol, sell, buy
+    list_ = "10,11.0,12.0,13.0,14.0,15.0,16.0,17.0".split(",")
     price = Price.from_list(list_)
     assert isinstance(price, Price)
     price._validate()
+    assert price.time == 10
+    assert price == 11.0

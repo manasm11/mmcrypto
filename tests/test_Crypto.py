@@ -8,12 +8,10 @@ from pytest import mark
 requests_cache.install_cache(expire_after=360)
 
 
-# @mark.xfail(reason="Will Complete After Testing Price")
 def test_crypto(data_directory_, test):
     assert "data" not in data_directory_, "Check the data_directory_ fixture"
 
     # Crypto.update TESTS
-
     Crypto.update(data_directory=data_directory_)
     assert os.path.exists(data_directory_), f"{data_directory_} not created"
     btc_file = os.path.join(data_directory_, "btc.csv")
@@ -44,15 +42,16 @@ def test_crypto(data_directory_, test):
         TypeError, ".*must be a str.*", Crypto, symbol="win", data_directory=[]
     )
     price = Price(
+        value=1.2,
         time=datetime.now().timestamp(),
         low=1,
         high=2,
-        value=1.2,
         vol=1000,
         open_=1.1,
         sell=1.12,
         buy=1.13,
     )
+    assert price == 1.2
 
 
 def test_crypto_add_price(crypto, price):
@@ -61,15 +60,6 @@ def test_crypto_add_price(crypto, price):
         line = f.readlines()[-1]
         for attr in price.attrs:
             assert str(price[attr]) in line
-    prices = crypto.get_prices()
-    prices_list = [_ for _ in prices]
-    assert len(prices_list) > 0
-    assert isinstance(prices_list[0], Price)
-    try:
-        for p in prices:
-            p._validate()
-    except Exception:
-        assert False, "Invalid Price"
 
 
 def test_crypto_all(data_directory_):
@@ -80,3 +70,18 @@ def test_crypto_all(data_directory_):
     assert "btc" in [c.symbol for c in all_]
     assert "win" in [c.symbol for c in all_]
     assert "doge" in [c.symbol for c in all_]
+
+
+def test_crypto_get_price(crypto, data_directory_):
+    prices = crypto.get_prices()
+    prices_list = [_ for _ in prices]
+    assert len(prices_list) > 0
+    assert isinstance(prices_list[0], Price)
+    try:
+        for p in prices:
+            p._validate()
+    except Exception:
+        assert False, "Invalid Price"
+    btc = Crypto("btc", data_directory_)
+    btc_prices = [_ for _ in btc.get_prices()]
+    assert btc_prices[1] > 100

@@ -21,13 +21,13 @@ class Price(float):
     def __init__(
         self,
         value,
+        time=None,
         low=None,
         high=None,
         open_=None,
         vol=None,
         sell=None,
         buy=None,
-        time=None,
     ):
         self.low = low
         self.high = high
@@ -51,7 +51,10 @@ class Price(float):
 
     def __setattr__(self, name, value):
         if value is not None:
-            value = float(value)
+            try:
+                value = int(value)
+            except ValueError:
+                value = float(value)
         return super().__setattr__(name, value)
 
     def todict(self):
@@ -71,14 +74,15 @@ class Price(float):
             writer.writerow(row)
 
     def _validate(self):
-        assert self > 0
         for attr in self.attrs:
             if self[attr] is None:
                 raise AttributeError(f"{attr} not assigned in Price")
 
     @classmethod
     def from_list(cls, list_):
-        price = Price(0)
+        price = Price(
+            value=list_[1],
+        )
         for attr, value in zip(cls.attrs, list_):
             price[attr] = value
         return price
